@@ -12,6 +12,7 @@
 <h1>
 	WetCookie FileServer  
 </h1>
+access Limit : ${pathLimit }<br>
 current path : ${path }
 <br>
 <form action="pathConfig" method="post">
@@ -33,15 +34,17 @@ path config :
 
 <br>
 <br>
-<c:forEach var="path" items="${pathList }">
-/<a>${path }</a>
-</c:forEach>
 
 <br>
 <ul>
-<c:forEach var="file" items="${list }">
+<c:if test="${parentPath!=null }">
 <li>
-${file }
+<a href="pathChange?path=${parentPath }">..</a>
+</li>
+</c:if>
+<c:forEach var="file" items="${fileList }">
+<li>
+<a href="pathChange?path=${path }${file }/">${file }</a>
 </li>
 </c:forEach>
 </ul>

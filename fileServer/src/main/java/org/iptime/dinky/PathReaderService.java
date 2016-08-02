@@ -20,9 +20,14 @@ public class PathReaderService {
 			String[] list = reqPath.list();
 			ArrayList<String> returnList = new ArrayList<String>();
 			
-			for (int i = 0; i < list.length; i++) {
-				returnList.add(list[i]);
+			try {
+				for (int i = 0; i < list.length; i++) {
+					returnList.add(list[i]);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			
 			
 			return returnList;
 			//return read path
@@ -36,8 +41,16 @@ public class PathReaderService {
 	}
 	
 	public boolean pathValidation(String path){
-		System.out.println(path);
+		return this.isFile(path)||this.isDir(path) ? true : false;
+	}
+	
+	public boolean isDir(String path){
 		File checkObj = new File(path);
-		return checkObj.isFile()||checkObj.isDirectory() ? true : false;
+		return checkObj.isDirectory() ? true : false;
+	}
+	
+	public boolean isFile(String path){
+		File checkObj = new File(path);
+		return checkObj.isFile() ? true : false;
 	}
 }

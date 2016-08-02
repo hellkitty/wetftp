@@ -29,7 +29,8 @@ public class PathController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PathController.class);
 	
-	private String savePath = "/";
+	private String savedPath = "/";
+	private String changedPath = "";
 	
 	@Autowired
 	PathReaderService pathService;
@@ -45,11 +46,13 @@ public class PathController {
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 		
 		String formattedDate = dateFormat.format(date);
-		String[] pathList = savePath.split("/");
-//		List<String> pathList = new ArrayList<String>();
-		model.addAttribute("pathList", pathList);
-		model.addAttribute("path", savePath);
-		model.addAttribute("list", pathService.readPath(savePath));
+		
+		String targetPath = changedPath.equals("") ? savedPath : changedPath;
+		
+		model.addAttribute("path", targetPath);
+		model.addAttribute("parentPath", savedPath.compareTo(targetPath)!=0 ? targetPath.replaceFirst("[\\w\\d._-]+/$", "") : null);
+		model.addAttribute("pathLimit", savedPath);
+		model.addAttribute("fileList", pathService.readPath(targetPath));
 		
 		model.addAttribute("serverTime", formattedDate );
 		
@@ -64,17 +67,18 @@ public class PathController {
 	@RequestMapping(value="/pathConfig", method=RequestMethod.POST)
 	public String pathConfig(String path){
 		
-		this.savePath = pathService.pathValidation(path) ? path : this.savePath;
+		this.savedPath = pathService.pathValidation(path) ? path : this.savedPath;
+		this.changedPath = "";
 		
-		logger.info("savePath : "+savePath);
+		logger.info("savedPath : "+savedPath);
+		logger.info("changePath reset : "+changedPath);
 		
 		return "redirect:/";
 	}
 	
 	@RequestMapping(value="/pathChange", method=RequestMethod.GET)
 	public String pathChange(String path, Model model){
-		
-		
+		this.changedPath = pathService.isDir(path) ? path : this.changedPath;
 		
 		return "redirect:/";
 	}
@@ -91,7 +95,7 @@ public class PathController {
 	}
 	
 	private void doUploadFile(String fileName, byte[] fileData) throws Exception {
-		File target = new File(savePath, fileName);
+		File target = new File(savedPath, fileName);
 		FileCopyUtils.copy(fileData, target);
 	}
 	
