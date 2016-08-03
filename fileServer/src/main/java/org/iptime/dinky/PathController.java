@@ -9,12 +9,14 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import org.iptime.dinky.domain.FileObj;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -60,7 +62,7 @@ public class PathController {
 	}
 	
 	@RequestMapping(value="/getPath", method=RequestMethod.POST)
-	public @ResponseBody ArrayList<String> getPath(String pathValue){
+	public @ResponseBody ArrayList<FileObj> getPath(String pathValue){
 		return pathService.readPath(pathValue);
 	}
 	
@@ -84,18 +86,27 @@ public class PathController {
 	}
 	
 	@RequestMapping(value="/uploadFile", method=RequestMethod.POST)
-	public String upload(MultipartFile file) throws Exception {
+	public String upload(MultipartFile file, String path) throws Exception {
 		logger.info("originalName: "+file.getOriginalFilename());
 		logger.info("size : "+file.getSize());
 		logger.info("contentType: "+file.getContentType());
 		
-		doUploadFile(file.getOriginalFilename(), file.getBytes());
+		doUploadFile(file.getOriginalFilename(),path , file.getBytes());
 		
 		return "redirect:/";
 	}
 	
-	private void doUploadFile(String fileName, byte[] fileData) throws Exception {
-		File target = new File(savedPath, fileName);
+	@RequestMapping(value="/deleteFile", method=RequestMethod.GET)
+	public String deleteFile(Model model, String path){
+		
+		logger.info("delete req : "+path);
+		logger.info("result : "+pathService.deleteFile(path));
+		
+		return "redirect:/";
+	}
+	
+	private void doUploadFile(String fileName, String path, byte[] fileData) throws Exception {
+		File target = new File(path, fileName);
 		FileCopyUtils.copy(fileData, target);
 	}
 	

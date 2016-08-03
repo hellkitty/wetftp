@@ -29,25 +29,88 @@ path config :
 
 <form action="uploadFile" method="post" enctype="multipart/form-data">
 	<input type="file" name="file">
+	<input type="hidden" name="path" value="${path }">
 	<input type="submit" name="upload">
 </form>
 
 <br>
 <br>
-
 <br>
-<ul>
+
+
+<table border="1px">
+<thead>
+<tr>
+<th>check</th>
+<th>name</th>
+<th>size</th>
+<th>download</th>
+<th>createLink</th>
+<th>delete</th>
+</tr>
+</thead>
+
+<tbody>
 <c:if test="${parentPath!=null }">
-<li>
+<tr>
+<td>
+</td>
+<td>
 <a href="pathChange?path=${parentPath }">..</a>
-</li>
+</td>
+</tr>
 </c:if>
+
 <c:forEach var="file" items="${fileList }">
-<li>
-<a href="pathChange?path=${path }${file }/">${file }</a>
-</li>
+<tr>
+<td>
+<input type="checkbox">
+</td>
+<td>
+<c:if test="${!file.isFile }">
+<a href="pathChange?path=${path }${file.fileName }/">${file.fileName }</a>
+</c:if>
+<c:if test="${file.isFile }">
+${file.fileName }
+</c:if>
+</td>
+
+<td>
+<c:if test="${file.isFile }">
+${file.fileSize }
+</c:if>
+
+</td>
+<td>
+<c:if test="${file.isFile }">
+down
+</c:if>
+</td>
+<td>
+<c:if test="${file.isFile }">
+create
+</c:if>
+</td>
+<td>
+<c:if test="${file.isFile }">
+<a href="deleteFile?path=${path }${file.fileName }/">del</a>
+</c:if>
+
+</td>
+
+</tr>
 </c:forEach>
-</ul>
+
+</tbody>
+
+<tfoot>
+<tr>
+<td>
+</td>
+</tr>
+</tfoot>
+
+</table>
 
 </body>
 </html>
