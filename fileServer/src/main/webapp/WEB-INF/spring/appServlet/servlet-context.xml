@@ -22,11 +22,19 @@
 	</beans:bean>
 	
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="maxUploadSize" value="10485760"></beans:property>
+		<!-- <beans:property name="maxUploadSize" value="10485760"></beans:property> -->
 	</beans:bean>
 	
 	<context:component-scan base-package="org.iptime.dinky" />
 	
 	
+	<beans:bean id="logInProcessInterceptor" class="org.iptime.dinky.interceptor.LogInProcessInterceptor"/>
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/"/>
+			<beans:ref bean="logInProcessInterceptor"/>
+		</interceptor>
+	</interceptors>
 	
 </beans:beans>

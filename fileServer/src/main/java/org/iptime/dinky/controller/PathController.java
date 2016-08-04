@@ -1,4 +1,4 @@
-package org.iptime.dinky;
+package org.iptime.dinky.controller;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import org.iptime.dinky.PathReaderService;
 import org.iptime.dinky.domain.FileObj;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Handles requests for the application home page.
@@ -86,12 +88,13 @@ public class PathController {
 	}
 	
 	@RequestMapping(value="/uploadFile", method=RequestMethod.POST)
-	public String upload(MultipartFile file, String path) throws Exception {
+	public String upload(MultipartFile file, String path, RedirectAttributes ra) throws Exception {
 		logger.info("originalName: "+file.getOriginalFilename());
 		logger.info("size : "+file.getSize());
 		logger.info("contentType: "+file.getContentType());
-		
-		doUploadFile(file.getOriginalFilename(),path , file.getBytes());
+		boolean result = doUploadFile(file.getOriginalFilename(),path , file.getBytes());
+		logger.info("result : "+result);
+		ra.addFlashAttribute("result", result ? "uploadSuccess" : "fuckOff");
 		
 		return "redirect:/";
 	}
@@ -105,9 +108,17 @@ public class PathController {
 		return "redirect:/";
 	}
 	
-	private void doUploadFile(String fileName, String path, byte[] fileData) throws Exception {
+	private boolean doUploadFile(String fileName, String path, byte[] fileData) {
 		File target = new File(path, fileName);
-		FileCopyUtils.copy(fileData, target);
+		try {
+			FileCopyUtils.copy(fileData, target);
+		} catch (Exception e) {
+			//System.out.println(e.getMessage());
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
 	}
 	
 }

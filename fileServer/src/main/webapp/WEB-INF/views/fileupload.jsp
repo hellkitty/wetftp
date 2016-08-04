@@ -12,6 +12,9 @@
 <h1>
 	WetCookie FileServer  
 </h1>
+hi ${member.memberId }. <a href="logout">logout</a>
+<br>
+<br>
 access Limit : ${pathLimit }<br>
 current path : ${path }
 <br>
@@ -34,6 +37,8 @@ path config :
 </form>
 
 <br>
+<br>
+${result }
 <br>
 <br>
 

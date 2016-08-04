@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.iptime.dinky.mapper.MemberMapper">
+
+	<insert id="registerMember" parameterType="Member">
+		insert into member (memberId, memberPw, memberGrade, memberRegDate) values (#{memberId}, #{memberPw}, #{memberGrade}, now())
+	</insert>
+	
+	<select id="getMemberInfo" parameterType="Member" resultType="Member">
+		select * from member where memberId = #{memberId} AND memberPw = #{memberPw}
+	</select>
+</mapper>
