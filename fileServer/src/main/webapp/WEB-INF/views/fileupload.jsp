@@ -88,7 +88,7 @@ ${file.fileSize }
 </td>
 <td>
 <c:if test="${file.isFile }">
-down
+<a href="download?path=${path }&fileName=${file.fileName }">down</a>
 </c:if>
 </td>
 <td>

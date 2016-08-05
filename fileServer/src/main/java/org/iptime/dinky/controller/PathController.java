@@ -1,6 +1,8 @@
 package org.iptime.dinky.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,11 +11,16 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import org.iptime.dinky.PathReaderService;
+import org.apache.commons.io.IOUtils;
 import org.iptime.dinky.domain.FileObj;
+import org.iptime.dinky.service.PathReaderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -94,7 +101,7 @@ public class PathController {
 		logger.info("contentType: "+file.getContentType());
 		boolean result = doUploadFile(file.getOriginalFilename(),path , file.getBytes());
 		logger.info("result : "+result);
-		ra.addFlashAttribute("result", result ? "uploadSuccess" : "fuckOff");
+		ra.addFlashAttribute("result", result ? "uploadSuccess" : "No permission. Fuck Off");
 		
 		return "redirect:/";
 	}
@@ -119,6 +126,36 @@ public class PathController {
 		}
 		
 		return true;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/download", method=RequestMethod.GET)
+	private ResponseEntity<byte[]> downloadFile(String fileName, String path) throws Exception{
+		
+		InputStream in = null;
+		ResponseEntity<byte[]> entity = null;
+		
+		logger.info("path : "+path);
+		logger.info("File name : "+fileName);
+		
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			
+			in = new FileInputStream(path+fileName);
+			
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.add("Content-Disposition", "attachment; filename=\""+new String(fileName.getBytes("UTF-8"),"ISO-8859-1")+"\"");
+			//추가작업 필요
+			
+			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+		} finally {
+			in.close();
+		}
+		
+		return entity;
 	}
 	
 }

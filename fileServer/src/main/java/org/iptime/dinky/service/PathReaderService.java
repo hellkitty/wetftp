@@ -1,4 +1,4 @@
-package org.iptime.dinky;
+package org.iptime.dinky.service;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ public class PathReaderService {
 			try {
 				for (int i = 0; i < list.length; i++) {
 					File tmpFile = new File(path+list[i]);
+					System.out.println(tmpFile.getName()+" w : "+tmpFile.canWrite()+" r : "+tmpFile.canRead()+" e : "+tmpFile.canExecute());
 					returnList.add(new FileObj(list[i], tmpFile.length(), tmpFile.isFile()));
 				}
 			} catch (Exception e) {

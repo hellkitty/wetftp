@@ -4,14 +4,48 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>WetCookie FileServer</title>
 </head>
 <body>
+<h1>
+	WetCookie FileServer  
+</h1>
 <form action="memberRegister" method="Post">
+<table border="1px">
+<tr>
+<td>
+id
+</td>
+<td>
 <input type="text" name="memberId">
+</td>
+</tr>
+
+<tr>
+<td>
+password
+</td>
+<td>
 <input type="password" name="memberPw">
+</td>
+</tr>
+
+<tr>
+
+<td>
+re-password
+</td>
+<td>
 <input type="password" id="memberPwCheck">
-<button type="submit"></button>
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+<button type="submit">register</button>
+</td>
+</tr>
+</table>
 </form>
 </body>
 </html>

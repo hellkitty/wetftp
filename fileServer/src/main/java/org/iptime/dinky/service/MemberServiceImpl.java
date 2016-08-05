@@ -16,8 +16,12 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Override
 	public boolean registerMember(Member member) {
-		member.setMemberPw(makeSHA256(member.getMemberPw()));
-		return dao.registerMember(member)==1 ? true : false;
+		if(member.getMemberId()!=null){
+			member.setMemberPw(makeSHA256(member.getMemberPw()));
+			return dao.registerMember(member)==1 ? true : false;
+		}
+		
+		return false;
 	}
 
 	@Override
