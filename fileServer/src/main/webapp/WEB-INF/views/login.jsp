@@ -10,6 +10,8 @@
 <h1>
 	WetCookie FileServer  
 </h1>
+${msg }
+<br>
 <form action="memberLogin" method="post">
 <table border="1px">
 <tr>

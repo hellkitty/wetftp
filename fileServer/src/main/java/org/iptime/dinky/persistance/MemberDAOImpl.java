@@ -42,7 +42,19 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public Member getMemberInfo(Member member) {
-		return session.selectOne(namespace+".getMemberInfo", member);
+		Member returnMember = new Member();
+		try {
+			returnMember = session.selectOne(namespace+".getMemberInfo", member);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return returnMember;
+	}
+
+	@Override
+	public int checkMemberId(Member member) {
+		return session.selectOne(namespace+".checkMemberId", member);
 	}
 
 }

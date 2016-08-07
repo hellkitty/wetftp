@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.iptime.dinky.domain.Member;
+import org.iptime.dinky.domain.ReturnMsgObj;
 import org.iptime.dinky.persistance.MemberDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,20 @@ public class MemberServiceImpl implements MemberService {
 	MemberDAO dao;
 	
 	@Override
-	public boolean registerMember(Member member) {
+	public ReturnMsgObj registerMember(Member member) {
+		if(dao.checkMemberId(new Member(member.getMemberId()))!=0){
+			return new ReturnMsgObj(false, "Register fail. Id already exist. Use another Id.");
+		}
+		if(!member.getMemberPw().equals(member.getMemberRePw())){
+			return new ReturnMsgObj(false, "Register fail. Check your password. You must write same password at both input form.");
+		}
 		if(member.getMemberId()!=null){
 			member.setMemberPw(makeSHA256(member.getMemberPw()));
-			return dao.registerMember(member)==1 ? true : false;
+			return dao.registerMember(member)==1 
+					? new ReturnMsgObj(true, "Register success.") : new ReturnMsgObj(false, "Register fail. Try again.");
 		}
 		
-		return false;
+		return new ReturnMsgObj(false, "Id is empty, write Id to use.");
 	}
 
 	@Override

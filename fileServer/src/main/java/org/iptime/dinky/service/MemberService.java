@@ -1,10 +1,11 @@
 package org.iptime.dinky.service;
 
 import org.iptime.dinky.domain.Member;
+import org.iptime.dinky.domain.ReturnMsgObj;
 
 public interface MemberService {
 
-	public boolean registerMember(Member member);
+	public ReturnMsgObj registerMember(Member member);
 	public void changePassword(Member member);
 	public void removeMember(Member member);
 	public void configMemberGrade(Member member);

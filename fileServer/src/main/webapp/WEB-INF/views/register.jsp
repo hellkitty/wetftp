@@ -10,6 +10,8 @@
 <h1>
 	WetCookie FileServer  
 </h1>
+${msg }
+<br>
 <form action="memberRegister" method="Post">
 <table border="1px">
 <tr>
@@ -36,7 +38,7 @@ password
 re-password
 </td>
 <td>
-<input type="password" id="memberPwCheck">
+<input type="password" name="memberRePw">
 </td>
 </tr>
 

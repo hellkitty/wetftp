@@ -9,5 +9,5 @@ public interface MemberDAO {
 	public void removeMember(Member member);
 	public void configMemberGrade(Member member);
 	public Member getMemberInfo(Member member);
-	
+	public int checkMemberId(Member member);
 }

@@ -29,7 +29,7 @@ path config :
 
 </div>
 
-
+uploadForm
 <form action="uploadFile" method="post" enctype="multipart/form-data">
 	<input type="file" name="file">
 	<input type="hidden" name="path" value="${path }">
@@ -49,6 +49,9 @@ ${result }
 <th>check</th>
 <th>name</th>
 <th>size</th>
+<th>permission</th>
+<th>owner</th>
+<th>lastModify</th>
 <th>download</th>
 <th>createLink</th>
 <th>delete</th>
@@ -86,8 +89,13 @@ ${file.fileSize }
 </c:if>
 
 </td>
+
+<td>${file.filePermission }</td>
+<td>${file.fileOwner }</td>
+<td>${file.lastModify }</td>
+
 <td>
-<c:if test="${file.isFile }">
+<c:if test="${file.isFile&&file.readPermission  }">
 <a href="download?path=${path }&fileName=${file.fileName }">down</a>
 </c:if>
 </td>
@@ -97,7 +105,7 @@ create
 </c:if>
 </td>
 <td>
-<c:if test="${file.isFile }">
+<c:if test="${file.isFile&&file.readPermission }">
 <a href="deleteFile?path=${path }${file.fileName }/">del</a>
 </c:if>
 

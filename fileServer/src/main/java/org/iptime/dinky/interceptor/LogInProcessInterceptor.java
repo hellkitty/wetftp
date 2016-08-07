@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.iptime.dinky.domain.Member;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class LogInProcessInterceptor extends HandlerInterceptorAdapter{
@@ -15,6 +16,9 @@ public class LogInProcessInterceptor extends HandlerInterceptorAdapter{
 		HttpSession session =  request.getSession();
 		if(session.getAttribute("member")==null){
 			response.sendRedirect("memberLogin");
+			return false;
+		} else if(((Member)session.getAttribute("member")).getMemberGrade()>2){
+			response.sendRedirect("hasNoPermission");
 			return false;
 		}
 		
